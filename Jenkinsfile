@@ -3,8 +3,23 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        nodejs('nodejs') {
-          sh 'yarn setup'
+        catchError() {
+          nodejs('nodejs') {
+            sh 'yarn setup'
+          }
+
+        }
+
+      }
+    }
+
+    stage('Unit tests') {
+      steps {
+        catchError() {
+          nodejs('nodejs') {
+            sh 'grunt test-unit'
+          }
+
         }
 
       }
