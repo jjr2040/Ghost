@@ -15,7 +15,7 @@ pipeline {
 
     stage('Unit tests') {
       steps {
-        catchError() {
+        warnError(message: 'Oops, someone broke something') {
           nodejs('nodejs') {
             sh 'grunt test-unit'
           }
