@@ -18,7 +18,7 @@ pipeline {
       steps {
         warnError(message: 'Oops, someone broke something') {
           nodejs('nodejs') {
-            sh 'yarn run cypress run -C ./tests/E2E/cypress/cypress.json ./tests/E2E/cypress/'
+            sh 'yarn run cypress run -P ./tests/E2E/cypress/ ./tests/E2E/cypress/'
           }
 
         }
@@ -30,7 +30,7 @@ pipeline {
       steps {
         warnError(message: 'Error running cypress random') {
           nodejs('nodejs') {
-            sh 'yarn run cypress run -C ./tests/E2E/cypress/cypress.json ./tests/Random/Cypress/'
+            sh 'yarn run cypress run -P ./tests/E2E/cypress/ ./tests/Random/Cypress/'
           }
 
         }
