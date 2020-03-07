@@ -1,12 +1,13 @@
 pipeline {
   agent any
   stages {
-    stage('Build') {
+    stage('Build and run') {
       steps {
         catchError() {
           nodejs('nodejs') {
             sh 'yarn setup'
             sh 'yarn add cypress --dev'
+            sh 'grunt dev & wait-on http://localhost:4200'
           }
 
         }
