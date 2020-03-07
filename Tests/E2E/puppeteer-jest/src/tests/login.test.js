@@ -15,7 +15,7 @@ describe('Ghost Login', () => {
 
         await page.click('.login');
 
-        await expect(page).toMatch('Please fill out the form to sign in.', {timeout: 10000});
+        await expect(page).toMatch('Please fill out the form to sign in', {timeout: 10000});
         page.close();
     }, timeout);
 
