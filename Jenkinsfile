@@ -1,12 +1,11 @@
 pipeline {
   agent any
   stages {
-    stage('Build and Run') {
+    stage('Build') {
       steps {
         catchError() {
           nodejs('nodejs') {
             sh 'yarn setup'
-            sh 'grunt dev'
             sh 'yarn add cypress --dev'
           }
 
