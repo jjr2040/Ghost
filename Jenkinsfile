@@ -1,11 +1,13 @@
 pipeline {
   agent any
   stages {
-    stage('Build') {
+    stage('Build and Run') {
       steps {
         catchError() {
           nodejs('nodejs') {
             sh 'yarn setup'
+            sh 'grunt dev'
+            sh 'yarn add cypress --dev'
           }
 
         }
@@ -13,11 +15,23 @@ pipeline {
       }
     }
 
-    stage('Unit tests') {
+    stage('E2E Cypress') {
       steps {
         warnError(message: 'Oops, someone broke something') {
           nodejs('nodejs') {
-            sh 'grunt test-unit'
+            sh 'cypress run ./tests/E2E/cypress/'
+          }
+
+        }
+
+      }
+    }
+
+    stage('Random Cypress') {
+      steps {
+        warnError(message: 'Error running cypress random') {
+          nodejs('nodejs') {
+            sh 'cypress run ./tests/Random/Cypress/'
           }
 
         }
