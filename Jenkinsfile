@@ -12,7 +12,7 @@ pipeline {
           nodejs('nodejs') {
             sh 'yarn setup'
             // sh 'yarn add cypress cypress-image-snapshot --dev'
-            sh 'grunt dev & wait-on http://localhost:4200' 
+            sh 'grunt dev & wait-on http://localhost:2368' 
           }
         }
       }
