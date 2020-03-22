@@ -1,17 +1,17 @@
 
-// describe('Register', function() {
-//     it('Visits Ghost and register', function() {
-//         cy.visit('http://localhost:2368/ghost/#/setup/one')
-//         cy.matchImageSnapshot('register');
-//         cy.contains('Create your account ').click()
-//         cy.get('form[id="setup"]').find('input[name="blog-title"]').click().type("admin")
-//         cy.get('form[id="setup"]').find('input[name="name"]').click().type("admin")
-//         cy.get('form[id="setup"]').find('input[name="email"]').click().type("admin@test.com")
-//         cy.get('form[id="setup"]').find('input[name="password"]').click().type("admin12345")
-//         cy.get('button[type="submit"]').click()
-//         cy.contains('I\'ll do this later, take me to my site!').click()
-//     })
-// })
+describe('Register', function() {
+    it('Visits Ghost and register', function() {
+        cy.visit('http://localhost:2368/ghost/#/setup/one')
+        cy.matchImageSnapshot('register');
+        cy.contains('Create your account ').click()
+        cy.get('form[id="setup"]').find('input[name="blog-title"]').click().type("admin")
+        cy.get('form[id="setup"]').find('input[name="name"]').click().type("admin")
+        cy.get('form[id="setup"]').find('input[name="email"]').click().type("admin@test.com")
+        cy.get('form[id="setup"]').find('input[name="password"]').click().type("admin12345")
+        cy.get('button[type="submit"]').click()
+        cy.contains('I\'ll do this later, take me to my site!').click()
+    })
+})
 
 describe('Login', () => {
     
