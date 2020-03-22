@@ -28,7 +28,7 @@ pipeline {
         warnError(message: 'Oops, someone broke something') {
           dir('tests/E2E/cypress/') {
             nodejs('nodejs') {
-              sh 'yarn run cypress run .'
+              sh 'yarn run cypress run --env failOnSnapshotDiff=false .'
             }
           }
         }
