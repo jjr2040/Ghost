@@ -1,7 +1,7 @@
 pipeline {
   agent any
   stages {
-    stage('Build and run') {
+    stage('Build') {
       steps {
         catchError() {
           dir('tests/E2E/cypress/') {
@@ -10,9 +10,10 @@ pipeline {
             }
           }
           nodejs('nodejs') {
+            sh 'yarn add start-server-and-test --dev'
             sh 'yarn setup'
             // sh 'yarn add cypress cypress-image-snapshot --dev'
-            sh 'grunt dev & wait-on http://localhost:2368' 
+            // sh 'grunt dev & wait-on http://127.0.0.1:2368' 
           }
         }
       }
@@ -26,11 +27,14 @@ pipeline {
       }
       steps {
         warnError(message: 'Oops, someone broke something') {
-          dir('tests/E2E/cypress/') {
-            nodejs('nodejs') {
-              sh 'yarn run cypress run --env failOnSnapshotDiff=false .'
-            }
+          nodejs('nodejs') {
+            sh "yarn run cy:ci"
           }
+          // dir('tests/E2E/cypress/') {
+          //   nodejs('nodejs') {
+          //     sh 'yarn run cypress run --env failOnSnapshotDiff=false .'
+          //   }
+          // }
         }
 
       }

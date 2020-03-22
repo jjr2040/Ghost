@@ -32,7 +32,9 @@
     "lint:test": "eslint -c core/test/.eslintrc.json --ignore-path core/test/.eslintignore 'core/test/**/*.js'",
     "lint": "yarn lint:server && yarn lint:frontend && yarn lint:test",
     "posttest": "yarn lint",
-    "fixmodulenotdefined": "yarn cache clean && cd core/client && rm -rf node_modules tmp dist && yarn && cd ../../"
+    "fixmodulenotdefined": "yarn cache clean && cd core/client && rm -rf node_modules tmp dist && yarn && cd ../../",
+    "cy:run": "yarn run cypress run --env failOnSnapshotDiff=false -P ./tests/E2E/cypress/ ./tests/E2E/cypress/",
+    "cy:ci": "start-server-and-test dev http://localhost:2368 cy:run"
   },
   "engines": {
     "node": "^10.13.0 || ^12.10.0",
@@ -135,6 +137,8 @@
     "sqlite3": "4.1.1"
   },
   "devDependencies": {
+    "cypress": "^4.2.0",
+    "cypress-image-snapshot": "^3.1.1",
     "eslint": "6.8.0",
     "eslint-plugin-ghost": "1.0.0",
     "grunt": "1.0.4",
@@ -161,6 +165,7 @@
     "should": "13.2.3",
     "should-http": "0.1.1",
     "sinon": "9.0.0",
+    "start-server-and-test": "^1.10.11",
     "supertest": "4.0.2",
     "tmp": "0.0.33"
   },
