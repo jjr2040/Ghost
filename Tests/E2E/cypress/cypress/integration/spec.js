@@ -1,35 +1,44 @@
-/*describe('Ghost Register', function() {
-    it('Visits Ghost and register', function() {
-        cy.visit('http://localhost:2368/ghost/#/setup/one')
-        cy.contains('Create your account ').click()
-        cy.get('form[id="setup"]').find('input[name="blog-title"]').click().type("admin")
-        cy.get('form[id="setup"]').find('input[name="name"]').click().type("admin")
-        cy.get('form[id="setup"]').find('input[name="email"]').click().type("admin@test.com")
-        cy.get('form[id="setup"]').find('input[name="password"]').click().type("admin12345")
-        cy.get('button[type="submit"]').click()
-        cy.contains('I\'ll do this later, take me to my site!').click()
-    })
-})*/
-describe('Ghost fails login', function() {
-    it('Visits Ghost and fails at login', function() {
+
+// describe('Register', function() {
+//     it('Visits Ghost and register', function() {
+//         cy.visit('http://localhost:2368/ghost/#/setup/one')
+//         cy.matchImageSnapshot('register');
+//         cy.contains('Create your account ').click()
+//         cy.get('form[id="setup"]').find('input[name="blog-title"]').click().type("admin")
+//         cy.get('form[id="setup"]').find('input[name="name"]').click().type("admin")
+//         cy.get('form[id="setup"]').find('input[name="email"]').click().type("admin@test.com")
+//         cy.get('form[id="setup"]').find('input[name="password"]').click().type("admin12345")
+//         cy.get('button[type="submit"]').click()
+//         cy.contains('I\'ll do this later, take me to my site!').click()
+//     })
+// })
+
+describe('Login', () => {
+    
+    it('Visits Ghost and fails at login', () => {
         cy.visit('http://localhost:2368/ghost/#/signin')
+        cy.matchImageSnapshot('login');
         cy.get('form[id="login"]').find('input[name="identification"]').click().type("wrongemail1@example.com")
         cy.get('form[id="login"]').find('input[name="password"]').click().type("wrongemail")
         cy.get('button[type="submit"]').click()
         cy.contains('Access denied.')
+        cy.matchImageSnapshot('login-failed');
     })
-})
-describe('Ghost login', function() {
-    it('Visits Ghost and fails at login', function() {
+
+    it('Visits Ghost and success at login', () => {
         cy.visit('http://localhost:2368/ghost/#/signin')
         cy.get('form[id="login"]').find('input[name="identification"]').click().type("admin@test.com")
         cy.get('form[id="login"]').find('input[name="password"]').click().type("admin12345")
         cy.get('button[type="submit"]').click()
         cy.contains('View site')
+        cy.matchImageSnapshot('login-success');
     })
+
 })
-describe('Ghost create a post', function(){
-    it('Visits Ghost and create a post',function(){
+
+describe('Post', () => {
+
+    it('Visits Ghost and create a post', () => {
         cy.visit('http://localhost:2368/ghost/#/signin')
         cy.get('form[id="login"]').find('input[name="identification"]').click().type("admin@test.com")
         cy.get('form[id="login"]').find('input[name="password"]').click().type("admin12345")
@@ -49,9 +58,8 @@ describe('Ghost create a post', function(){
         cy.visit('http://localhost:2368/ghost/#/posts?type=published',{ timeout: 40000 })
         cy.get('main[role="main"]').contains('This is my post #1')
     })
-})
-describe('Ghost modify a post', function(){
-    it('Visits Ghost and modify a post',function(){
+
+    it('Visits Ghost and modify a post', () => {
         cy.visit('http://localhost:2368/ghost/#/signin')
         cy.get('form[id="login"]').find('input[name="identification"]').click().type("admin@test.com")
         cy.get('form[id="login"]').find('input[name="password"]').click().type("admin12345")
@@ -65,9 +73,8 @@ describe('Ghost modify a post', function(){
         cy.get('main[role="main"]').contains('This is my post #1').click({force: true})
         cy.get('div[data-placeholder="Begin writing your post..."]').contains('I am modifying my post')
     })
-})
-describe('Ghost visualize a post', function(){
-    it('Visits Ghost and visualize a post', function(){
+
+    it('Visits Ghost and visualize a post', () => {
         cy.visit('http://localhost:2368/ghost/#/signin')
         cy.get('form[id="login"]').find('input[name="identification"]').click().type("admin@test.com")
         cy.get('form[id="login"]').find('input[name="password"]').click().type("admin12345")
@@ -86,13 +93,13 @@ describe('Ghost visualize a post', function(){
 })
 
 
-describe('Ghost logout', function() {
-    it('Visits Ghost and fails at login', function() {
+describe('Logout', () => {
+
+    it('Visits Ghost and fails at login', () => {
         cy.contains('@').click()
         cy.contains(' Sign Out').click()
         Cypress.on('uncaught:exception', (err, runnable) => {
             return false
         })
-
     })
 })
