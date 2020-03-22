@@ -4,15 +4,15 @@ pipeline {
     stage('Build and run') {
       steps {
         catchError() {
-          nodejs('nodejs') {
-            sh 'yarn setup'
-            // sh 'yarn add cypress cypress-image-snapshot --dev'
-            sh 'grunt dev & wait-on http://localhost:4200' 
-          }
           dir('tests/E2E/cypress/') {
             nodejs('nodejs') {
               sh 'yarn install'
             }
+          }
+          nodejs('nodejs') {
+            sh 'yarn setup'
+            // sh 'yarn add cypress cypress-image-snapshot --dev'
+            sh 'grunt dev & wait-on http://localhost:4200' 
           }
         }
       }
