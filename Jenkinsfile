@@ -4,11 +4,11 @@ pipeline {
     stage('Build') {
       steps {
         catchError() {
-          // dir('tests/E2E/cypress/') {
-          //   nodejs('nodejs') {
-          //     sh 'yarn install'
-          //   }
-          // }
+          dir('tests/E2E/cypress/') {
+            nodejs('nodejs') {
+              sh 'yarn install'
+            }
+          }
           nodejs('nodejs') {
             // sh 'yarn add start-server-and-test --dev'
             sh 'yarn setup'
