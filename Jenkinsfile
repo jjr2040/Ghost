@@ -11,6 +11,7 @@ pipeline {
           }
           nodejs('nodejs') {
             // sh 'yarn add start-server-and-test --dev'
+            sh 'yarn run fixmodulenotdefined'
             sh 'yarn setup'
             // sh 'yarn add cypress cypress-image-snapshot --dev'
             // sh 'grunt dev & wait-on http://127.0.0.1:2368' 
