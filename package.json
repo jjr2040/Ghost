@@ -35,7 +35,7 @@
     "fixmodulenotdefined": "yarn cache clean && cd core/client && rm -rf node_modules tmp dist && yarn && cd ../../",
     "db:reset": "knex-migrator reset && knex-migrator init",
     "cy:run": "cypress run --env failOnSnapshotDiff=false --project ./tests/E2E/cypress --spec ./tests/E2E/cypress/cypress/integration/spec.js",
-    "cy:ci": "yarn db:reset && start-server-and-test dev http-get://localhost:2368 cy:run"
+    "cy:ci": "yarn db:reset && start-server-and-test dev http-get://localhost:2368/ghost/assets/ghost.js cy:run"
   },
   "engines": {
     "node": "^10.13.0 || ^12.10.0",
