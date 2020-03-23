@@ -33,8 +33,9 @@
     "lint": "yarn lint:server && yarn lint:frontend && yarn lint:test",
     "posttest": "yarn lint",
     "fixmodulenotdefined": "yarn cache clean && cd core/client && rm -rf node_modules tmp dist && yarn && cd ../../",
-    "cy:run": "yarn run cypress run --env failOnSnapshotDiff=false -P ./tests/E2E/cypress/ ./tests/E2E/cypress/",
-    "cy:ci": "start-server-and-test dev http://localhost:2368 cy:run"
+    "db:reset": "knex-migrator reset && knex-migrator init",
+    "cy:run": "cypress run --env failOnSnapshotDiff=false --project ./tests/E2E/cypress --spec ./tests/E2E/cypress/cypress/integration/spec.js",
+    "cy:ci": "yarn db:reset && start-server-and-test dev http-get://localhost:2368 cy:run"
   },
   "engines": {
     "node": "^10.13.0 || ^12.10.0",
@@ -158,6 +159,8 @@
     "grunt-update-submodules": "0.4.1",
     "matchdep": "2.0.0",
     "mocha": "7.1.0",
+    "mocha-junit-reporter": "^1.23.3",
+    "mocha-multi-reporters": "^1.1.7",
     "mock-knex": "0.4.7",
     "nock": "12.0.1",
     "proxyquire": "2.1.3",

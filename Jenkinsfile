@@ -4,13 +4,13 @@ pipeline {
     stage('Build') {
       steps {
         catchError() {
-          dir('tests/E2E/cypress/') {
-            nodejs('nodejs') {
-              sh 'yarn install'
-            }
-          }
+          // dir('tests/E2E/cypress/') {
+          //   nodejs('nodejs') {
+          //     sh 'yarn install'
+          //   }
+          // }
           nodejs('nodejs') {
-            sh 'yarn add start-server-and-test --dev'
+            // sh 'yarn add start-server-and-test --dev'
             sh 'yarn setup'
             // sh 'yarn add cypress cypress-image-snapshot --dev'
             // sh 'grunt dev & wait-on http://127.0.0.1:2368' 

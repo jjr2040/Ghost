@@ -1,15 +1,16 @@
-
-describe('Register', function() {
-    it('Visits Ghost and register', function() {
+describe('Register', () => {
+    it('Visits Ghost and register', () => {
         cy.visit('http://localhost:2368/ghost/#/setup/one')
-        cy.matchImageSnapshot('register');
         cy.contains('Create your account ').click()
+        cy.matchImageSnapshot('register')
         cy.get('form[id="setup"]').find('input[name="blog-title"]').click().type("admin")
         cy.get('form[id="setup"]').find('input[name="name"]').click().type("admin")
         cy.get('form[id="setup"]').find('input[name="email"]').click().type("admin@test.com")
         cy.get('form[id="setup"]').find('input[name="password"]').click().type("admin12345")
         cy.get('button[type="submit"]').click()
         cy.contains('I\'ll do this later, take me to my site!').click()
+        cy.contains('@').click()
+        cy.contains(' Sign Out').click()
     })
 })
 
@@ -22,7 +23,7 @@ describe('Login', () => {
         cy.get('form[id="login"]').find('input[name="password"]').click().type("wrongemail")
         cy.get('button[type="submit"]').click()
         cy.contains('Access denied.')
-        cy.matchImageSnapshot('login-failed');
+        cy.matchImageSnapshot('login-failed')
     })
 
     it('Visits Ghost and success at login', () => {
@@ -31,7 +32,9 @@ describe('Login', () => {
         cy.get('form[id="login"]').find('input[name="password"]').click().type("admin12345")
         cy.get('button[type="submit"]').click()
         cy.contains('View site')
-        cy.matchImageSnapshot('login-success');
+        cy.matchImageSnapshot('login-success')
+        cy.contains('@').click()
+        cy.contains(' Sign Out').click()
     })
 
 })
