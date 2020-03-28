@@ -37,7 +37,9 @@
     "cy:run": "cypress run --project ./tests/E2E/cypress --spec ./tests/E2E/cypress/cypress/integration/spec.js --env failOnSnapshotDiff=false",
     "cy:runupdate": "cypress run --project ./tests/E2E/cypress --spec ./tests/E2E/cypress/cypress/integration/spec.js --env failOnSnapshotDiff=false,updateSnapshots=true",
     "cy:ci": "yarn db:reset && start-server-and-test dev http-get://localhost:2368/ghost/assets/ghost.js cy:run",
-    "cy:ciupdate": "yarn db:reset && start-server-and-test dev http-get://localhost:2368/ghost/assets/ghost.js cy:runupdate"
+    "cy:ciupdate": "yarn db:reset && start-server-and-test dev http-get://localhost:2368/ghost/assets/ghost.js cy:runupdate",
+    "pu:run": "yarn --cwd ./tests/E2E/puppeteer-jest/ test",
+    "pu:ci": "yarn db:reset && start-server-and-test dev http-get://localhost:2368/ghost/assets/ghost.js pu:run"
   },
   "engines": {
     "node": "^10.13.0 || ^12.10.0",
