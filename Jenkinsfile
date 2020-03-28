@@ -29,7 +29,14 @@ pipeline {
       steps {
         warnError(message: 'Oops, someone broke something') {
           nodejs('nodejs') {
-            sh "yarn run cy:ci"
+            script {
+              if ( param.UPDATE_SNAPSHOTS ) {
+                sh "yarn run cy:ciupdate"
+              } else {
+                sh "yarn run cy:ci"
+              }
+            }
+            
           }
           // dir('tests/E2E/cypress/') {
           //   nodejs('nodejs') {
@@ -72,6 +79,7 @@ pipeline {
     booleanParam(name: 'ENABLE_E2E_PUPPETEER', defaultValue: true, description: 'Enable E2E testing with puppeteer')
     booleanParam(name: 'ENABLE_RANDOM_TESTING', defaultValue: true, description: 'Enable random testing testing')
     booleanParam(name: 'ENABLE_VRT', defaultValue: true, description: 'Enable visual regression testing (VRT)')
+    booleanParam(name: 'UPDATE_SNAPSHOTS', defaultValue: false, description: 'Should update VRT snapshots')
     booleanParam(name: 'HEADLESS', defaultValue: true, description: 'Enable headless testing')
   }
 }
