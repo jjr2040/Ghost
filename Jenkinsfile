@@ -30,7 +30,7 @@ pipeline {
         warnError(message: 'Oops, someone broke something') {
           nodejs('nodejs') {
             script {
-              if ( param.UPDATE_SNAPSHOTS ) {
+              if ( params.UPDATE_SNAPSHOTS ) {
                 sh "yarn run cy:ciupdate"
               } else {
                 sh "yarn run cy:ci"
