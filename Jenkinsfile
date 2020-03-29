@@ -56,6 +56,23 @@ pipeline {
       }
     }
 
+    stage('E2E Jest-Puppeteer') {
+      when {
+        expression {
+          params.ENABLE_E2E_PUPPETEER
+        }
+      }
+      steps {
+        warnError(message: 'Oops, someone broke something') {
+          nodejs('nodejs') {
+            script {
+                sh "yarn run pu:ci"
+            }
+          }
+        }
+      }
+    }
+
     stage('Random Cypress') {
       when {
         expression {
