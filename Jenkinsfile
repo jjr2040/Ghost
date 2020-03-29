@@ -56,7 +56,7 @@ pipeline {
       }
     }
 
-    stage('E2E Jest-Puppeteer') {
+    stage('E2E Puppeteer') {
       when {
         expression {
           params.ENABLE_E2E_PUPPETEER
