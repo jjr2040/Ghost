@@ -40,7 +40,7 @@
     "cy:ciupdate": "yarn db:reset && start-server-and-test dev http-get://localhost:2368/ghost/assets/ghost.js cy:runupdate",
     "pu:run": "yarn --cwd ./tests/E2E/puppeteer-jest test",
     "pu:ci": "yarn db:reset && start-server-and-test dev http-get://localhost:2368/ghost/assets/ghost.js pu:run",
-    "bdt:install": "yarn install --modules-folder ./tests/BDT/cucumber-webdriverio",
+    "bdt:install": "yarn install --modules-folder ./tests/BDT/cucumber-webdriverio/node_modules",
     "bdt:run": "yarn --cwd ./tests/BDT/cucumber-webdriverio test",
     "bdt:ci": "yarn db:reset && start-server-and-test dev http-get://localhost:2368/ghost/assets/ghost.js bdt:install bdt:run"
   },
