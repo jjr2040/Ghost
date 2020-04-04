@@ -102,6 +102,12 @@ pipeline {
     stage('Browser Matrix') {
       matrix {
         agent any
+        when { 
+          anyOf {
+            expression { params.BROWSER_FILTER == 'all' }
+            expression { params.BROWSER_FILTER == env.BROWSER }
+          } 
+        }
         axes {
           axis {
             name 'BROWSER'
@@ -155,5 +161,6 @@ pipeline {
     booleanParam(name: 'ENABLE_VRT', defaultValue: true, description: 'Enable visual regression testing (VRT)')
     booleanParam(name: 'UPDATE_SNAPSHOTS', defaultValue: false, description: 'Should update VRT snapshots')
     booleanParam(name: 'HEADLESS', defaultValue: true, description: 'Enable headless testing')
+    choice(name: 'BROWSER_FILTER', choices: ['all', 'firefox', 'chrome'], description: 'Run on specific browser')
   }
 }
