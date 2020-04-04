@@ -17,7 +17,7 @@ pipeline {
       }
     }
 
-    stage('E2E Cypress') {
+    stage('E2E Cypress (VRT)') {
       when {
         expression {
           params.ENABLE_E2E_CYPRESS 
