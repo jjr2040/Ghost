@@ -1,0 +1,8 @@
+{
+  "chromeWebSecurity": false,
+  "video": false,
+  "reporter": "mocha-multi-reporters",
+  "reporterOptions": {
+    "configFile": "cypress-reporters.json"
+  }
+}
