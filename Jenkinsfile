@@ -117,10 +117,10 @@ pipeline {
                     sh 'yarn install'
                   }
                 }
-                nodejs('nodejs') {
-                  sh 'yarn run fixmodulenotdefined'
-                  sh 'yarn setup'
-                }
+                // nodejs('nodejs') {
+                //   sh 'yarn run fixmodulenotdefined'
+                //   sh 'yarn setup'
+                // }
               }
             }
           }
