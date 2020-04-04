@@ -4,8 +4,9 @@ var {Then} = require('cucumber');
 var {expect} = require('chai');
 
 var baseUrl = 'http://localhost:2368/ghost';
-var user = 'se-mende@uniandes.edu.co';
-var pw = 'Pruebas123';
+var username = 'admin';
+var user = 'admin@test.com';
+var pw = 'admin12345';
 
 Given('I go to ghost admin', () => {
     browser.url(baseUrl + '/#/signin');
@@ -16,6 +17,44 @@ Given('I go to the main site', () => {
 });
 
 ////////////// LOGIN //////////////
+When('I create an admin account', () => {
+    $('span:nth-child(1)').waitForDisplayed(5000);
+    var btnCreateAccount = $('span:nth-child(1)');
+    browser.waitUntil(() => btnCreateAccount.isClickable());
+    btnCreateAccount.click();
+
+    $('input[name="blog-title"]').waitForDisplayed(5000);
+
+    var titleInput = $('input[name="blog-title"]');
+    browser.waitUntil(() => titleInput.isClickable());
+    titleInput.click();
+    titleInput.setValue(username);
+
+    var nameInput = $('input[name="name"]');
+    browser.waitUntil(() => nameInput.isClickable());
+    nameInput.click();
+    nameInput.setValue(username);
+
+    var emailInput = $('input[name="email"]');
+    browser.waitUntil(() => emailInput.isClickable());
+    emailInput.click();
+    emailInput.setValue(user);
+
+    var passwordInput = $('input[name="password"]');
+    browser.waitUntil(() => passwordInput.isClickable());
+    passwordInput.click();
+    passwordInput.setValue(pw);
+
+    var submitBtn = $('button[type="submit"]');
+    browser.waitUntil(() => submitBtn.isClickable());
+    submitBtn.click();
+
+    $('.gh-flow-skip').waitForDisplayed(5000);
+    var skipBtn = $('.gh-flow-skip');
+    browser.waitUntil(() => skipBtn.isClickable());
+    skipBtn.click();
+});
+
 When(/^I fill with (.*) and (.*)$/ , (email, password) => {
     var mailInput = $('input[name="identification"]');
     browser.waitUntil(() => mailInput.isClickable());
@@ -44,6 +83,18 @@ When('I try to login', () => {
     $('.login').click();
 });
 
+When('I logout', () => {
+    $('.gh-user-name').waitForDisplayed(5000);
+    var userBtn = $('.gh-user-name');
+    browser.waitUntil(() => userBtn.isClickable());
+    userBtn.click();
+
+    $('.user-menu-signout').waitForDisplayed(5000);
+    var signoutBtn = $('.user-menu-signout');
+    browser.waitUntil(() => signoutBtn.isClickable());
+    signoutBtn.click();
+});
+
 Then('I expect to see {string}', error => {
     $('.main-error').waitForDisplayed(5000);
     var alertText = browser.$('.main-error').getText();
@@ -53,7 +104,13 @@ Then('I expect to see {string}', error => {
 Then('I expect to enter the site', () => {
     $('.gh-nav-menu-details-blog').waitForDisplayed(5000);
     var title = browser.$('.gh-nav-menu-details-blog').getText();
-    expect(title).to.include('Pruebas');
+    expect(title).to.include('admin');
+});
+
+Then('I expect to see login page', () => {
+    $('.login').waitForDisplayed(5000);
+    var btnText = browser.$('.login span').getText();
+    expect(btnText).to.include('Sign in');
 });
 
 ////////////// Posts //////////////

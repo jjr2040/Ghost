@@ -65,6 +65,23 @@ pipeline {
       }
     }
 
+    stage('BDT') {
+      when {
+        expression {
+          params.ENABLE_BDT
+        }
+      }
+      steps {
+        warnError(message: 'Oops, someone broke something'){
+          nodejs('nodejs') {
+            script {
+              sh "yarn run bdt:ci"
+            }
+          }
+        }
+      }
+    }
+
     stage('Random Cypress') {
       when {
         expression {
@@ -86,6 +103,7 @@ pipeline {
   parameters {
     booleanParam(name: 'ENABLE_E2E_CYPRESS', defaultValue: true, description: 'Enable E2E testing with cypress')
     booleanParam(name: 'ENABLE_E2E_PUPPETEER', defaultValue: true, description: 'Enable E2E testing with puppeteer')
+    booleanParam(name: 'ENABLE_BDT', defaultValue: false, description: 'Enable BDT testing with Cucumber y Gherkin')
     booleanParam(name: 'ENABLE_RANDOM_TESTING', defaultValue: true, description: 'Enable random testing testing')
     booleanParam(name: 'ENABLE_VRT', defaultValue: true, description: 'Enable visual regression testing (VRT)')
     booleanParam(name: 'UPDATE_SNAPSHOTS', defaultValue: false, description: 'Should update VRT snapshots')
