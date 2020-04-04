@@ -129,7 +129,7 @@ pipeline {
               warnError(message: 'Oops, someone broke something') {
                 nodejs('nodejs') {
                   script {
-                    sh "cypress run --project ./tests/E2E/cypress --spec ./tests/E2E/cypress/cypress/integration/spec.js --env failOnSnapshotDiff=false --browser ${BROWSER}"
+                    sh "yarn run cypress run --project ./tests/E2E/cypress --spec ./tests/E2E/cypress/cypress/integration/spec.js --env failOnSnapshotDiff=false --browser ${BROWSER}"
                     // if ( params.UPDATE_SNAPSHOTS ) {
                     //   sh "yarn run cy:ciupdate"
                     // } else {
