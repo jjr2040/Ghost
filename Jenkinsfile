@@ -104,25 +104,53 @@ pipeline {
         agent any
         axes {
           axis {
-            name 'PLATFORM'
-            values 'linux', 'windows', 'mac'
-          }
-          axis {
             name 'BROWSER'
-            values 'firefox', 'chrome', 'safari', 'edge'
+            values 'firefox', 'chrome', 'edge', 'chromium'
           }
         }
         stages {
           stage('Build') {
             steps {
-              echo "Do Build for ${PLATFORM} - ${BROWSER}"
+              catchError() {
+                dir('tests/E2E/cypress/') {
+                  nodejs('nodejs') {
+                    sh 'yarn install'
+                  }
+                }
+                nodejs('nodejs') {
+                  sh 'yarn run fixmodulenotdefined'
+                  sh 'yarn setup'
+                }
+              }
             }
           }
           stage('Test') {
             steps {
-              echo "Do Test for ${PLATFORM} - ${BROWSER}"
+              warnError(message: 'Oops, someone broke something') {
+                nodejs('nodejs') {
+                  script {
+                    sh "cypress run --project ./tests/E2E/cypress --spec ./tests/E2E/cypress/cypress/integration/spec.js --env failOnSnapshotDiff=false --browser ${BROWSER}"
+                    // if ( params.UPDATE_SNAPSHOTS ) {
+                    //   sh "yarn run cy:ciupdate"
+                    // } else {
+                    //   sh "yarn run cy:ci"
+                    // }
+                  }
+                  
+                }
+              }
             }
           }
+          // stage('Build') {
+          //   steps {
+          //     echo "Do Build for ${PLATFORM} - ${BROWSER}"
+          //   }
+          // }
+          // stage('Test') {
+          //   steps {
+          //     echo "Do Test for ${PLATFORM} - ${BROWSER}"
+          //   }
+          // }
         }
       }
     }
