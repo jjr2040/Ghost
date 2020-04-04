@@ -10,17 +10,14 @@ pipeline {
             }
           }
           nodejs('nodejs') {
-            // sh 'yarn add start-server-and-test --dev'
             sh 'yarn run fixmodulenotdefined'
             sh 'yarn setup'
-            // sh 'yarn add cypress cypress-image-snapshot --dev'
-            // sh 'grunt dev & wait-on http://127.0.0.1:2368' 
           }
         }
       }
     }
 
-    stage('E2E Cypress') {
+    stage('E2E Cypress (VRT)') {
       when {
         expression {
           params.ENABLE_E2E_CYPRESS 
@@ -38,11 +35,6 @@ pipeline {
             }
             
           }
-          // dir('tests/E2E/cypress/') {
-          //   nodejs('nodejs') {
-          //     sh 'yarn run cypress run --env failOnSnapshotDiff=false .'
-          //   }
-          // }
         }
 
       }
@@ -73,6 +65,23 @@ pipeline {
       }
     }
 
+    stage('BDT') {
+      when {
+        expression {
+          params.ENABLE_BDT
+        }
+      }
+      steps {
+        warnError(message: 'Oops, someone broke something'){
+          nodejs('nodejs') {
+            script {
+              sh "yarn run bdt:ci"
+            }
+          }
+        }
+      }
+    }
+
     stage('Random Cypress') {
       when {
         expression {
@@ -90,13 +99,68 @@ pipeline {
       }
     }
 
+    stage('Browser Matrix') {
+      matrix {
+        agent any
+        when { 
+          anyOf {
+            expression { params.BROWSER_FILTER == 'all' }
+            expression { params.BROWSER_FILTER == env.BROWSER }
+          } 
+        }
+        axes {
+          axis {
+            name 'BROWSER'
+            values 'firefox', 'chrome'
+          }
+        }
+        stages {
+          stage('Build') {
+            steps {
+              catchError() {
+                dir('tests/E2E/cypress/') {
+                  nodejs('nodejs') {
+                    sh 'yarn install'
+                  }
+                }
+                nodejs('nodejs') {
+                  sh 'yarn run fixmodulenotdefined'
+                  sh 'yarn setup'
+                }
+              }
+            }
+          }
+          stage('Test') {
+            steps {
+              warnError(message: 'Oops, someone broke something') {
+                nodejs('nodejs') {
+                  script {
+                    // sh "yarn run cypress run --project ./tests/E2E/cypress --spec ./tests/E2E/cypress/cypress/integration/spec.js --env failOnSnapshotDiff=false --browser ${BROWSER}"
+                    // if ( params.UPDATE_SNAPSHOTS ) {
+                    //   sh "yarn run cy:ciupdate"
+                    // } else {
+                    //   sh "yarn run cy:ci"
+                    // }
+                    sh "yarn run cy:ci${BROWSER}"
+                  }
+                  
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
   }
   parameters {
     booleanParam(name: 'ENABLE_E2E_CYPRESS', defaultValue: true, description: 'Enable E2E testing with cypress')
     booleanParam(name: 'ENABLE_E2E_PUPPETEER', defaultValue: true, description: 'Enable E2E testing with puppeteer')
+    booleanParam(name: 'ENABLE_BDT', defaultValue: false, description: 'Enable BDT testing with Cucumber y Gherkin')
     booleanParam(name: 'ENABLE_RANDOM_TESTING', defaultValue: true, description: 'Enable random testing testing')
     booleanParam(name: 'ENABLE_VRT', defaultValue: true, description: 'Enable visual regression testing (VRT)')
     booleanParam(name: 'UPDATE_SNAPSHOTS', defaultValue: false, description: 'Should update VRT snapshots')
     booleanParam(name: 'HEADLESS', defaultValue: true, description: 'Enable headless testing')
+    choice(name: 'BROWSER_FILTER', choices: ['all', 'firefox', 'chrome'], description: 'Run on specific browser')
   }
 }

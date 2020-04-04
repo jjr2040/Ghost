@@ -27,4 +27,4 @@ Scenario: Delete Page
     When I click on pages
     And I click on previously created post
     And I delete it
-    Then I expect to see the posts page
+    Then I expect to see the pages page

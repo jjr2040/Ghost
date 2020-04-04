@@ -23,7 +23,6 @@ describe('Login', () => {
         cy.get('form[id="login"]').find('input[name="password"]').click().type("wrongemail")
         cy.get('button[type="submit"]').click()
         cy.contains('Access denied.')
-        cy.matchImageSnapshot('login-failed')
     })
 
     it('Visits Ghost and success at login', () => {
@@ -59,6 +58,7 @@ describe('Post', () => {
         cy.contains('Publish').click()
         cy.get('button[class="gh-btn gh-btn-blue gh-publishmenu-button gh-btn-icon ember-view"]').click()
         cy.visit('http://localhost:2368/ghost/#/posts?type=published',{ timeout: 40000 })
+        cy.matchImageSnapshot('create-post')
         cy.get('main[role="main"]').contains('This is my post #1')
     })
 
@@ -74,6 +74,7 @@ describe('Post', () => {
         cy.get('button[class="gh-btn gh-btn-blue gh-publishmenu-button gh-btn-icon ember-view"]').click()
         cy.visit('http://localhost:2368/ghost/#/posts?type=published',{ timeout: 40000 })
         cy.get('main[role="main"]').contains('This is my post #1').click({force: true})
+        cy.matchImageSnapshot('modify-post')
         cy.get('div[data-placeholder="Begin writing your post..."]').contains('I am modifying my post')
     })
 
@@ -92,6 +93,7 @@ describe('Post', () => {
             const doc=$iframe2.contents()
             cy.wrap(doc.find('h1')).should('contain', 'This is my post #1') 
         })
+        cy.matchImageSnapshot('visualize-post')
     })
 })
 
@@ -99,6 +101,7 @@ describe('Post', () => {
 describe('Logout', () => {
 
     it('Visits Ghost and fails at login', () => {
+        cy.matchImageSnapshot('logout')
         cy.contains('@').click()
         cy.contains(' Sign Out').click()
         Cypress.on('uncaught:exception', (err, runnable) => {
