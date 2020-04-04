@@ -101,9 +101,7 @@ pipeline {
 
     stage('Browser Matrix') {
       matrix {
-        agent {
-          label "${BROWSER}-agent"
-        }
+        agent any
         axes {
           axis {
             name 'BROWSER'
