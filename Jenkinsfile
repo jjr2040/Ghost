@@ -99,6 +99,30 @@ pipeline {
       }
     }
 
+    stage('Mutating testing') {
+      when {
+        expression {
+          params.ENABLE_MUTATION
+        }
+      }
+      steps {
+        warnError(message: 'Error running mutating testing') {
+          nodejs('nodejs') {
+            sh 'npx stryker run'
+          }
+          publishHTML([allowMissing: false, 
+            alwaysLinkToLastBuild: true, 
+            keepAll: true, 
+            reportDir: 'reports/mutation/html/', 
+            reportFiles: 'index.html', 
+            reportName: 'Stryker mutation report', 
+            reportTitles: ''])
+        }
+
+      }
+      
+    }
+
     stage('Browser Matrix') {
       matrix {
         agent any
@@ -159,6 +183,7 @@ pipeline {
     booleanParam(name: 'ENABLE_BDT', defaultValue: false, description: 'Enable BDT testing with Cucumber y Gherkin')
     booleanParam(name: 'ENABLE_RANDOM_TESTING', defaultValue: true, description: 'Enable random testing testing')
     booleanParam(name: 'ENABLE_VRT', defaultValue: true, description: 'Enable visual regression testing (VRT)')
+    booleanParam(name: 'ENABLE_MUTATION', defaultValue: true, description: 'Enable mutating testing (VRT)')
     booleanParam(name: 'UPDATE_SNAPSHOTS', defaultValue: false, description: 'Should update VRT snapshots')
     booleanParam(name: 'HEADLESS', defaultValue: true, description: 'Enable headless testing')
     choice(name: 'BROWSER_FILTER', choices: ['all', 'firefox', 'chrome'], description: 'Run on specific browser')
