@@ -74,7 +74,9 @@ describe('Ghost Posts', () => {
 
         await page.click('a[data-test-nav="new-story"]');
 
+        await page.click('.gh-editor-title');
         await page.type('.gh-editor-title', "New post title");
+        await page.click('.koenig-editor__editor');
         await page.type('.koenig-editor__editor', "New post content");
 
         await page.click('.gh-publishmenu-trigger');
@@ -94,8 +96,30 @@ describe('Ghost Posts', () => {
         await page.waitFor(1000);
         await page.click('p:nth-child(2)');
 
-        await page.type('.gh-editor-title', " Edited");
-        await page.type('.koenig-editor__editor', " Edited");
+        await page.click('.gh-editor-title', {clickCount: 3});
+        await page.type('.gh-editor-title', "Edited Post Title");
+        await page.click('.koenig-editor__editor', {clickCount: 3});
+        await page.type('.koenig-editor__editor', "Edited Post Content");
+
+        await page.click('.gh-publishmenu-trigger');
+        await page.waitFor(1000);
+
+        await page.click('.gh-publishmenu-button');
+
+        await expect(page).toMatch("Published", {timeout: 10000});
+
+        page.close();
+    }, timeout);
+
+    test('Edit Post with phrase that contains accents', async () => {
+        let page = await initPage(1);
+
+        await page.click('a[data-test-nav="posts"]');
+        await page.waitFor(1000);
+        await page.click('p:nth-child(2)');
+
+        await page.click('.koenig-editor__editor', {clickCount: 3});
+        await page.type('.koenig-editor__editor', "Ávido de ver cómo funcionan las tildes normales!");
 
         await page.click('.gh-publishmenu-trigger');
         await page.waitFor(1000);
@@ -173,6 +197,34 @@ describe('Ghost Pages', () => {
 
         await page.type('.gh-editor-title', " Edited");
         await page.type('.koenig-editor__editor', " Edited");
+
+        await page.click('.gh-publishmenu-trigger');
+        await page.waitFor(1000);
+
+        await page.click('.gh-publishmenu-button');
+
+        await expect(page).toMatch("Published", {timeout: 10000});
+
+        page.close();
+    }, timeout);
+
+    test('Edit Page with markdown code', async () => {
+        let page = await initPage(1);
+
+        await page.click('a[data-test-nav="pages"]');
+        await page.waitFor(1000);
+        await page.click('p:nth-child(2)');
+
+        await page.click('.koenig-editor__editor', {clickCount: 3});
+        await page.keyboard.press('Backspace');
+        await page.waitFor(1000);
+        await page.click('.stroke-middarkgrey');
+        await page.waitFor(1000);
+        await page.click('.flex:nth-child(3) .w8 path:nth-child(1)');
+        await page.waitFor(1000);
+        await page.click('.CodeMirror-code');
+        await page.waitFor(1000);
+        await page.type('.CodeMirror-code', "## Testing markdown with `code`");
 
         await page.click('.gh-publishmenu-trigger');
         await page.waitFor(1000);
