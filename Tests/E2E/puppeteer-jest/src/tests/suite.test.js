@@ -208,6 +208,27 @@ describe('Ghost Pages', () => {
         page.close();
     }, timeout);
 
+    test('Edit Page with different alphabet', async () => {
+        let page = await initPage(1);
+
+        await page.click('a[data-test-nav="pages"]');
+        await page.waitFor(1000);
+        await page.click('p:nth-child(2)');
+
+        await page.click('.koenig-editor__editor', {clickCount: 3});
+        await page.type('.koenig-editor__editor', "شسيب سشكمن نن");
+
+        await page.click('.gh-publishmenu-trigger');
+        await page.waitFor(1000);
+
+        await page.click('.gh-publishmenu-button');
+
+        await expect(page).toMatch("Published", {timeout: 10000});
+        await expect(page).toMatch("3 words", {timeout: 10000});
+
+        page.close();
+    }, timeout);
+
     test('Edit Page with markdown code', async () => {
         let page = await initPage(1);
 
