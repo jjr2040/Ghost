@@ -347,6 +347,57 @@ describe('Ghost Tags', () => {
     }, timeout);
 });
 
+///////////// General Settings ////////////
+describe('Ghost General Settings', () => {
+    test('Navigate to General Settings page', async () => {
+        let page = await initPage(1);
+
+        await page.click('a[data-test-nav="settings"]');
+
+        const h2Handle = await page.$("h2");
+        const html = await page.evaluate(h2Handle => h2Handle.innerHTML, h2Handle);
+
+        expect(html).toMatch("General settings");
+        page.close();
+    }, timeout);
+
+    test('Edit Title & Description', async () => {
+        let page = await initPage(1);
+
+        await page.click('a[data-test-nav="settings"]');
+
+        await page.click('button[data-test-toggle-pub-info]');
+        await page.waitFor(1000);
+
+        await page.click('input[data-test-title-input]');
+        await page.click('input[data-test-title-input]', {clickCount: 3});
+        await page.type('input[data-test-title-input]', "Pruebas Automáticas");
+
+        await page.click('button[data-test-save-button="true"]');
+
+        await expect(page).toMatch('Pruebas Automáticas', {timeout: 10000});
+        page.close();
+    }, timeout);
+
+    test('Edit Title & Description with uncommon input text', async () => {
+        let page = await initPage(1);
+
+        await page.click('a[data-test-nav="settings"]');
+
+        await page.click('button[data-test-toggle-pub-info]');
+        await page.waitFor(1000);
+
+        await page.click('input[data-test-title-input]');
+        await page.click('input[data-test-title-input]', {clickCount: 3});
+        await page.type('input[data-test-title-input]', "1");
+
+        await page.click('button[data-test-save-button="true"]');
+
+        await expect(page).toMatch('1', {timeout: 10000});
+        page.close();
+    }, timeout);
+});
+
 async function initPage(type)
 {
     const page = await browser.newPage();
